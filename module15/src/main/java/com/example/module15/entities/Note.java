@@ -1,22 +1,22 @@
 package com.example.module15.entities;
 
+import java.util.UUID;
+
 public class Note {
-    private Long id;
+    private UUID id;
     private String title;
     private String content;
 
     public Note(String title, String content) {
+        this.id = UUID.randomUUID();
         this.title = title;
         this.content = content;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
@@ -32,5 +32,9 @@ public class Note {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public void setId(UUID randomUUID) {
+        this.id = id;
     }
 }
