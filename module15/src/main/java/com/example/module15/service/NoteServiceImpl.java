@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 @Service
 public class NoteServiceImpl implements NoteService {
@@ -17,6 +16,10 @@ public class NoteServiceImpl implements NoteService {
         add(new Note("Homework", "Do homework"));
     }
 
+    private long generateUniqueId() {
+        return random.nextLong();
+    }
+
     @Override
     public List<Note> listAll() {
         return notes;
@@ -24,13 +27,13 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public Note add(Note note) {
-        note.setId(UUID.randomUUID());
+        note.setId(generateUniqueId());
         notes.add(note);
         return note;
     }
 
     @Override
-    public void deleteById(UUID id) {
+    public void deleteById(Long id) {
         notes.removeIf(note -> note.getId().equals(id));
     }
 
@@ -47,7 +50,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public Note getById(UUID id) {
+    public Note getById(Long id) {
         for (Note note : notes) {
             if (note.getId() == id) {
                 return note;

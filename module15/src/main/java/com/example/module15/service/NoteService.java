@@ -7,12 +7,8 @@ import java.util.UUID;
 
 public interface NoteService {
     List<Note> listAll();
-
     Note add(Note note);
-
-    void deleteById(UUID id);
-
+    void deleteById(Long id);
     void update(Note note);
-
-    Note getById(UUID id);
+    Note getById(Long id);
 }
