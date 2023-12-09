@@ -1,6 +1,12 @@
 package com.example.module15.entities;
 
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Data
+@Entity
 public class Note {
+    @Id
     private Long id;
     private String title;
     private String content;

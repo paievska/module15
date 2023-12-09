@@ -1,19 +1,25 @@
 package com.example.module15.service;
 
+import com.example.module15.NoteRepository;
 import com.example.module15.entities.Note;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@RequiredArgsConstructor
 @Service
 public class NoteServiceImpl implements NoteService {
+    private final NoteRepository repository;
     private final List<Note> notes = new ArrayList<>();
     private final Random random = new Random();
 
-    public NoteServiceImpl() {
-        add(new Note("Homework", "Do homework"));
+    @PostConstruct
+    public void init(){
+        System.out.println("repository.getClass() = " + repository.getClass());
     }
 
     private long generateUniqueId() {

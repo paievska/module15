@@ -1,9 +1,7 @@
 package com.example.module15.service;
 
 import com.example.module15.entities.Note;
-
 import java.util.List;
-import java.util.UUID;
 
 public interface NoteService {
     List<Note> listAll();
