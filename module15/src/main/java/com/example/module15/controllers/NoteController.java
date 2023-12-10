@@ -2,12 +2,14 @@ package com.example.module15.controllers;
 
 import com.example.module15.entities.Note;
 import com.example.module15.service.NoteService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("/note")
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/note")
 public class NoteController {
 
     private final NoteService noteService;
@@ -17,27 +19,30 @@ public class NoteController {
     }
 
     @GetMapping("/list")
-    public String listNotes(Model model) {
-        model.addAttribute("notes", noteService.listAll());
-        return "note/list";
+    public ResponseEntity<List<Note>> getAll(){
+        return noteService.getAll();
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Note> getById(@PathVariable Long id) {
+        return noteService.getById(id);
     }
 
-    @GetMapping("/edit")
-    public String editNote(@RequestParam long id, Model model) {
-        Note note = noteService.getById(id);
-        model.addAttribute("note", note);
-        return "note/edit";
+    @PostMapping("/add")
+    public ResponseEntity<Note> add(@RequestBody Note note) {
+        return noteService.add(note);
     }
 
-    @PostMapping("/edit")
-    public String updateNote(@ModelAttribute Note note) {
-        noteService.update(note);
-        return "redirect:/note/list";
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<Note> editNote(@RequestBody Note note) {
+        return noteService.update(note);
     }
 
-    @PostMapping("/delete")
-    public String deleteNote(@RequestParam long id) {
-        noteService.deleteById(id);
-        return "redirect:/note/list";
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Note> deleteById(@PathVariable long id) {
+        return noteService.deleteById(id);
+    }
+    @GetMapping
+    public ResponseEntity<String> defaultEndpoint() {
+        return new ResponseEntity<>("Welcome to the Note API!", HttpStatus.OK);
     }
 }

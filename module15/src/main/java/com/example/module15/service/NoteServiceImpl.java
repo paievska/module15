@@ -4,9 +4,10 @@ import com.example.module15.NoteRepository;
 import com.example.module15.entities.Note;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -14,7 +15,6 @@ import java.util.Random;
 @Service
 public class NoteServiceImpl implements NoteService {
     private final NoteRepository repository;
-    private final List<Note> notes = new ArrayList<>();
     private final Random random = new Random();
 
     @PostConstruct
@@ -27,41 +27,38 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> listAll() {
-        return notes;
+    public ResponseEntity<List<Note>> getAll() {
+        List<Note> notes = repository.findAll();
+        return new ResponseEntity<>(notes, HttpStatus.OK);
     }
 
     @Override
-    public Note add(Note note) {
+    public ResponseEntity<Note> add(Note note) {
         note.setId(generateUniqueId());
-        notes.add(note);
-        return note;
+        Note addedNode = repository.save(note);
+        return new ResponseEntity<>(addedNode, HttpStatus.CREATED);
     }
 
     @Override
-    public void deleteById(Long id) {
-        notes.removeIf(note -> note.getId().equals(id));
+    public ResponseEntity<Note> deleteById(Long id) {
+        repository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
-    public void update(Note note) {
-        for (Note oldNote : notes) {
-            if (oldNote.getId() == note.getId()) {
-                oldNote.setTitle(note.getTitle());
-                oldNote.setContent(note.getContent());
-                return;
-            }
+    public ResponseEntity<Note> update(Note note) {
+        if (repository.existsById(note.getId())) {
+            repository.save(note);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        throw new IllegalArgumentException("Error: Note not found with id: " + note.getId());
     }
 
     @Override
-    public Note getById(Long id) {
-        for (Note note : notes) {
-            if (note.getId() == id) {
-                return note;
-            }
-        }
-        throw new IllegalArgumentException("Error: Note not found with id: " + id);
+    public ResponseEntity<Note> getById(Long id) {
+        return repository.findById(id)
+                .map(note -> new ResponseEntity<>(note, HttpStatus.OK))
+                .orElse( new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
