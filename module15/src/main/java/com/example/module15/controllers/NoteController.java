@@ -43,6 +43,6 @@ public class NoteController {
     }
     @GetMapping
     public ResponseEntity<String> defaultEndpoint() {
-        return new ResponseEntity<>("Hello:) Welcome to the Note API!", HttpStatus.OK);
+        return new ResponseEntity<>("Welcome to the Note API!", HttpStatus.OK);
     }
 }
