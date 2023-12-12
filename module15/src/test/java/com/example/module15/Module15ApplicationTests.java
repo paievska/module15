@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class Module15ApplicationTests {
 
 	@Test
-	void testNote() {
+	void testNoteTitle() {
 		String expectedTitle = "Test Title";
 		String content = "Test Content";
 
